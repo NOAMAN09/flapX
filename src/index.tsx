@@ -315,17 +315,17 @@ const FlappyBird: React.FC = () => {
         soundHitRef.current.currentTime = 0;
         try {
           await soundHitRef.current.play();
-          soundHitRef.current.onended = () => {
-            if (soundDieRef.current) {
-              soundDieRef.current.currentTime = 0;
-              soundDieRef.current.play().catch(() => {});
-              soundDieRef.current.onended = () => {
-                showScore();
-              };
-            } else {
+        soundHitRef.current.onended = () => {
+          if (soundDieRef.current) {
+            soundDieRef.current.currentTime = 0;
+            soundDieRef.current.play().catch(() => {});
+            soundDieRef.current.onended = () => {
               showScore();
-            }
-          };
+            };
+          } else {
+            showScore();
+          }
+        };
         } catch {
           // If play fails, continue anyway
           if (soundDieRef.current && audioUnlockedRef.current) {
