@@ -9,18 +9,18 @@
 3. **Scroll down to "Pages"** (in the left sidebar under "Code and automation")
 
 4. **Under "Source"**, select:
-   - **Branch**: `main`
-   - **Folder**: `/ (root)` or `/build` 
+   - **Deploy from a branch**: `main`
+   - **Folder**: `/build` 
    
-   **IMPORTANT**: 
-   - If you select `/ (root)`, you'll need to rebuild and move build files to root
-   - **Recommended**: Use GitHub Actions to automatically deploy from `/build` folder
+   **Note**: The build folder is already committed with the correct paths for GitHub Pages.
 
 5. **Click Save**
 
-6. **Wait a few minutes** for GitHub Pages to build and deploy
+6. **Wait 1-2 minutes** for GitHub Pages to build and deploy
 
 7. **Your game will be available at**: `https://noaman09.github.io/flapX/`
+
+**That's it!** Your game should now be live.
 
 ## Recommended: Automatic Deployment with GitHub Actions
 
