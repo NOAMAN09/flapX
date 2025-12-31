@@ -1,0 +1,292 @@
+*,
+*:before,
+*:after {
+  /* border box */
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  /* gpu acceleration */
+  -webkit-transition: translate3d(0,0,0);
+  /* select disable */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  font-family: monospace;
+  font-size: 12px;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+.gamecontainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 525px;
+  cursor: pointer;
+}
+
+.gamescreen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.sky {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 80%;
+  background-repeat: repeat-x;
+  background-position: 0px 100%;
+  background-color: #4ec0ca;
+}
+
+.sky.animated {
+  -webkit-animation: animSky 7s linear infinite;
+  animation: animSky 7s linear infinite;
+}
+
+.sky.animated.paused {
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+@-webkit-keyframes animSky {
+  0% { background-position: 0px 100%; }
+  100% { background-position: -275px 100%; }
+}
+
+@keyframes animSky {
+  0% { background-position: 0px 100%; }
+  100% { background-position: -275px 100%; }
+}
+
+.flyarea {
+  position: absolute;
+  bottom: 0;
+  height: 420px;
+  width: 100%;
+}
+
+.ceiling {
+  position: absolute;
+  top: -16px;
+  height: 16px;
+  width: 100%;
+  background-repeat: repeat-x;
+}
+
+.ceiling.animated {
+  -webkit-animation: animCeiling 481ms linear infinite;
+  animation: animCeiling 481ms linear infinite;
+}
+
+.ceiling.animated.paused {
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+@-webkit-keyframes animCeiling {
+  0% { background-position: 0px 0px; }
+  100% { background-position: -63px 0px; }
+}
+
+@keyframes animCeiling {
+  0% { background-position: 0px 0px; }
+  100% { background-position: -63px 0px; }
+}
+
+.land {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 20%;
+  background-repeat: repeat-x;
+  background-position: 0px 0px;
+  background-color: #ded895;
+}
+
+.land.animated {
+  -webkit-animation: animLand 2516ms linear infinite;
+  animation: animLand 2516ms linear infinite;
+}
+
+.land.animated.paused {
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+@-webkit-keyframes animLand {
+  0% { background-position: 0px 0px; }
+  100% { background-position: -335px 0px; }
+}
+
+@keyframes animLand {
+  0% { background-position: 0px 0px; }
+  100% { background-position: -335px 0px; }
+}
+
+.bigscore {
+  position: absolute;
+  top: 20px;
+  left: 150px;
+  z-index: 100;
+}
+
+.bigscore img {
+  display: inline-block;
+  padding: 1px;
+}
+
+.splash {
+  position: absolute;
+  top: 75px;
+  left: 65px;
+  width: 188px;
+  height: 170px;
+  background-repeat: no-repeat;
+  transition: opacity 2s ease;
+}
+
+.scoreboard {
+  position: absolute;
+  opacity: 0;
+  top: 64px;
+  left: 43px;
+  width: 236px;
+  height: 280px;
+  background-repeat: no-repeat;
+  z-index: 1000;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.medal {
+  position: absolute;
+  top: 114px;
+  left: 32px;
+  width: 44px;
+  height: 44px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.currentscore {
+  position: absolute;
+  top: 105px;
+  left: 107px;
+  width: 104px;
+  height: 14px;
+  text-align: right;
+}
+
+.currentscore img {
+  padding-left: 2px;
+}
+
+.highscore {
+  position: absolute;
+  top: 147px;
+  left: 107px;
+  width: 104px;
+  height: 14px;
+  text-align: right;
+}
+
+.highscore img {
+  padding-left: 2px;
+}
+
+.replay {
+  position: absolute;
+  top: 205px;
+  left: 61px;
+  height: 115px;
+  width: 70px;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.bird {
+  position: absolute;
+  width: 34px;
+  height: 24px;
+  transform-origin: center;
+  transition: transform 0.1s linear;
+}
+
+.bird.animated {
+  -webkit-animation: animBird 300ms steps(4) infinite;
+  animation: animBird 300ms steps(4) infinite;
+}
+
+.bird.animated.paused {
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+@-webkit-keyframes animBird {
+  from { background-position: 0px 0px; }
+  to { background-position: 0px -96px; }
+}
+
+@keyframes animBird {
+  from { background-position: 0px 0px; }
+  to { background-position: 0px -96px; }
+}
+
+.pipe {
+  position: absolute;
+  width: 52px;
+  height: 100%;
+  z-index: 10;
+}
+
+.pipe.animated {
+  -webkit-animation: animPipe 7500ms linear;
+  animation: animPipe 7500ms linear;
+}
+
+.pipe.animated.paused {
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+@-webkit-keyframes animPipe {
+  0% { left: 900px; }
+  100% { left: -100px; }
+}
+
+@keyframes animPipe {
+  0% { left: 900px; }
+  100% { left: -100px; }
+}
+
+.pipe_upper {
+  position: absolute;
+  top: 0;
+  width: 52px;
+  background-repeat: repeat-y;
+  background-position: center;
+}
+
+.pipe_lower {
+  position: absolute;
+  bottom: 0;
+  width: 52px;
+  background-repeat: repeat-y;
+  background-position: center;
+}
+
