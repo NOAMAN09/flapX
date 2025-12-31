@@ -7,7 +7,6 @@
     "type": "git",
     "url": "https://github.com/NOAMAN09/flapX.git"
   },
-  "homepage": "https://noaman09.github.io/flapX",
   "private": false,
   "dependencies": {
     "react": "^18.2.0",
