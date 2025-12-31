@@ -146,6 +146,7 @@ const FlappyBird: React.FC = () => {
   const soundHitRef = useRef<HTMLAudioElement | null>(null);
   const soundDieRef = useRef<HTMLAudioElement | null>(null);
   const soundSwooshRef = useRef<HTMLAudioElement | null>(null);
+  const audioUnlockedRef = useRef(false);
 
   // Initialize audio
   useEffect(() => {
@@ -173,6 +174,34 @@ const FlappyBird: React.FC = () => {
     };
   }, []);
 
+  // Helper function to safely play audio (only after user interaction)
+  const playAudio = useCallback((audio: HTMLAudioElement | null) => {
+    if (!audio) return;
+    
+    // If audio is not unlocked, try to unlock it
+    if (!audioUnlockedRef.current) {
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            audioUnlockedRef.current = true;
+            audio.pause();
+            audio.currentTime = 0;
+          })
+          .catch(() => {
+            // Audio not unlocked yet, ignore
+          });
+      }
+      return;
+    }
+
+    // Audio is unlocked, play normally
+    audio.currentTime = 0;
+    audio.play().catch(() => {
+      // Ignore playback errors
+    });
+  }, []);
+
   // Load high score from localStorage
   useEffect(() => {
     const savedScore = localStorage.getItem('highscore');
@@ -198,10 +227,7 @@ const FlappyBird: React.FC = () => {
     // Fade in splash
     setTimeout(() => setSplashOpacity(1), 100);
     
-    if (soundSwooshRef.current) {
-      soundSwooshRef.current.currentTime = 0;
-      soundSwooshRef.current.play().catch(() => {});
-    }
+    // Don't play audio on initial splash - wait for user interaction
   }, []);
 
   // Show score (defined early so playerDead can use it)
@@ -231,10 +257,7 @@ const FlappyBird: React.FC = () => {
     setMedalScale(2);
 
     // Play swoosh
-    if (soundSwooshRef.current) {
-      soundSwooshRef.current.currentTime = 0;
-      soundSwooshRef.current.play().catch(() => {});
-    }
+    playAudio(soundSwooshRef.current);
 
     // Animate scoreboard in
     setTimeout(() => {
@@ -244,10 +267,7 @@ const FlappyBird: React.FC = () => {
 
     // Animate replay button in
     setTimeout(() => {
-      if (soundSwooshRef.current) {
-        soundSwooshRef.current.currentTime = 0;
-        soundSwooshRef.current.play().catch(() => {});
-      }
+      playAudio(soundSwooshRef.current);
       setReplayY(0);
       setReplayOpacity(1);
       if (medalType) {
@@ -261,21 +281,15 @@ const FlappyBird: React.FC = () => {
   // Player jump
   const playerJump = useCallback(() => {
     setVelocity(JUMP);
-    if (soundJumpRef.current) {
-      soundJumpRef.current.currentTime = 0;
-      soundJumpRef.current.play().catch(() => {});
-    }
+    playAudio(soundJumpRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [playAudio]);
 
   // Player score
   const playerScore = useCallback(() => {
     setScore(prev => prev + 1);
-    if (soundScoreRef.current) {
-      soundScoreRef.current.currentTime = 0;
-      soundScoreRef.current.play().catch(() => {});
-    }
-  }, []);
+    playAudio(soundScoreRef.current);
+  }, [playAudio]);
 
   // Player dead
   const playerDead = useCallback(() => {
@@ -297,11 +311,24 @@ const FlappyBird: React.FC = () => {
 
     // Play sounds and show score
     const playSounds = async () => {
-      if (soundHitRef.current) {
+      if (soundHitRef.current && audioUnlockedRef.current) {
         soundHitRef.current.currentTime = 0;
-        await soundHitRef.current.play().catch(() => {});
-        soundHitRef.current.onended = () => {
-          if (soundDieRef.current) {
+        try {
+          await soundHitRef.current.play();
+          soundHitRef.current.onended = () => {
+            if (soundDieRef.current) {
+              soundDieRef.current.currentTime = 0;
+              soundDieRef.current.play().catch(() => {});
+              soundDieRef.current.onended = () => {
+                showScore();
+              };
+            } else {
+              showScore();
+            }
+          };
+        } catch {
+          // If play fails, continue anyway
+          if (soundDieRef.current && audioUnlockedRef.current) {
             soundDieRef.current.currentTime = 0;
             soundDieRef.current.play().catch(() => {});
             soundDieRef.current.onended = () => {
@@ -310,7 +337,7 @@ const FlappyBird: React.FC = () => {
           } else {
             showScore();
           }
-        };
+        }
       } else {
         showScore();
       }
@@ -467,6 +494,18 @@ const FlappyBird: React.FC = () => {
 
   // Handle screen click/touch
   const handleScreenClick = useCallback(() => {
+    // Unlock audio on first user interaction
+    if (!audioUnlockedRef.current) {
+      audioUnlockedRef.current = true;
+      // Try to play a silent sound to unlock audio
+      if (soundJumpRef.current) {
+        soundJumpRef.current.play().then(() => {
+          soundJumpRef.current?.pause();
+          soundJumpRef.current!.currentTime = 0;
+        }).catch(() => {});
+      }
+    }
+
     if (gameState === GameState.GameScreen) {
       playerJump();
     } else if (gameState === GameState.SplashScreen) {
