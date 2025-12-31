@@ -276,7 +276,7 @@ const FlappyBird: React.FC = () => {
       }
       setReplayClickable(true);
     }, 700);
-  }, [highScore]);
+  }, [highScore, playAudio]);
 
   // Player jump
   const playerJump = useCallback(() => {
