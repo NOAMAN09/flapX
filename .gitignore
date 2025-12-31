@@ -1,2 +1,2 @@
 node_modules/
-build/
+# build/ - Commented out for GitHub Pages deployment
